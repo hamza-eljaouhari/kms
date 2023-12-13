@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple KMS</title>
+</head>
+<body>
+    <h1>Simple Key Management System</h1>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form action="/encrypt" method="post">
+        <label for="text_to_encrypt">Text to Encrypt:</label>
+        <input type="text" id="text_to_encrypt" name="text_to_encrypt">
+        <input type="submit" value="Encrypt">
+    </form>
+
+    <form action="/decrypt" method="post">
+        <label for="text_to_decrypt">Text to Decrypt:</label>
+        <input type="text" id="text_to_decrypt" name="text_to_decrypt">
+        <input type="submit" value="Decrypt">
+    </form>
+</body>
+</html>
