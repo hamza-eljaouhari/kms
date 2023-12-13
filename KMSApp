@@ -1,0 +1,58 @@
+import tkinter as tk
+from tkinter import messagebox
+from simple_kms import SimpleKMS  # Assuming the KMS code is saved as simple_kms.py
+
+class KMSApp:
+    def __init__(self, root):
+        self.kms = SimpleKMS()
+        root.title("Simple Key Management System")
+
+        # Encrypt Frame
+        self.encrypt_frame = tk.Frame(root)
+        self.encrypt_frame.pack(padx=10, pady=5)
+
+        self.encrypt_label = tk.Label(self.encrypt_frame, text="Text to Encrypt:")
+        self.encrypt_label.pack(side=tk.LEFT)
+
+        self.encrypt_entry = tk.Entry(self.encrypt_frame)
+        self.encrypt_entry.pack(side=tk.LEFT)
+
+        self.encrypt_button = tk.Button(self.encrypt_frame, text="Encrypt", command=self.encrypt)
+        self.encrypt_button.pack(side=tk.LEFT)
+
+        # Decrypt Frame
+        self.decrypt_frame = tk.Frame(root)
+        self.decrypt_frame.pack(padx=10, pady=5)
+
+        self.decrypt_label = tk.Label(self.decrypt_frame, text="Text to Decrypt:")
+        self.decrypt_label.pack(side=tk.LEFT)
+
+        self.decrypt_entry = tk.Entry(self.decrypt_frame)
+        self.decrypt_entry.pack(side=tk.LEFT)
+
+        self.decrypt_button = tk.Button(self.decrypt_frame, text="Decrypt", command=self.decrypt)
+        self.decrypt_button.pack(side=tk.LEFT)
+
+    def encrypt(self):
+        plaintext = self.encrypt_entry.get()
+        if plaintext:
+            encrypted_text = self.kms.encrypt(plaintext)
+            messagebox.showinfo("Encrypted Text", encrypted_text)
+        else:
+            messagebox.showwarning("Warning", "Please enter text to encrypt.")
+
+    def decrypt(self):
+        encrypted_text = self.decrypt_entry.get()
+        if encrypted_text:
+            try:
+                decrypted_text = self.kms.decrypt(encrypted_text)
+                messagebox.showinfo("Decrypted Text", decrypted_text)
+            except:
+                messagebox.showerror("Error", "Invalid encrypted text.")
+        else:
+            messagebox.showwarning("Warning", "Please enter text to decrypt.")
+
+# Main window
+root = tk.Tk()
+app = KMSApp(root)
+root.mainloop()
