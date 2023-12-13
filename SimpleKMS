@@ -1,0 +1,56 @@
+from cryptography.fernet import Fernet
+import os
+
+class SimpleKMS:
+    def __init__(self, key_file='key.key'):
+        self.key_file = key_file
+
+    def generate_key(self):
+        """
+        Generates a new key and saves it to a file.
+        """
+        key = Fernet.generate_key()
+        with open(self.key_file, 'wb') as key_file:
+            key_file.write(key)
+        print("New key generated and saved.")
+
+    def load_key(self):
+        """
+        Loads the key from the current directory named `key.key`.
+        """
+        if not os.path.exists(self.key_file):
+            print("Key file not found. Generating a new key...")
+            self.generate_key()
+
+        with open(self.key_file, 'rb') as key_file:
+            key = key_file.read()
+        return key
+
+    def encrypt(self, message):
+        """
+        Encrypts a message.
+        """
+        key = self.load_key()
+        f = Fernet(key)
+        encrypted_message = f.encrypt(message.encode())
+        return encrypted_message
+
+    def decrypt(self, encrypted_message):
+        """
+        Decrypts an encrypted message.
+        """
+        key = self.load_key()
+        f = Fernet(key)
+        decrypted_message = f.decrypt(encrypted_message)
+        return decrypted_message.decode()
+
+# Usage Example
+kms = SimpleKMS()
+
+# Encrypt a message
+encrypted = kms.encrypt("Hello, World!")
+print("Encrypted:", encrypted)
+
+# Decrypt the message
+decrypted = kms.decrypt(encrypted)
+print("Decrypted:", decrypted)
